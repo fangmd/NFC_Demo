@@ -12,7 +12,7 @@ import android.util.Log;
 
 import java.util.Arrays;
 
-public class MainActivity extends AppCompatActivity implements IOAsyncTask.OnResultListener {
+public class MainActivity extends AppCompatActivity implements OnResultListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private Tag tag;
@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements IOAsyncTask.OnRes
 
         // 获取默认的NFC控制器
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+
         if (nfcAdapter == null) {
             Log.d(TAG, "onCreate: 设备不支持NFC");
             finish();
@@ -75,6 +76,9 @@ public class MainActivity extends AppCompatActivity implements IOAsyncTask.OnRes
         //读取TAG
         IsoDep nfca = IsoDep.get(tagFromIntent);
         new IOAsyncTask(this).execute(nfca);
+
+//        MifareUltralight mifareUltralight = MifareUltralight.get(tagFromIntent);
+//        new IOAsyncTask2(this).execute(mifareUltralight);
     }
 
     //---------------------------------------------------------------
@@ -94,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements IOAsyncTask.OnRes
         //获取Tag对象
         tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
         //获取卡ID，这个ID一般没什么用，有可能是卡自动生成的
-        Log.d(TAG, "Id:" + Util.byteArrayToHexString(tag.getId()));
+        Log.d(TAG, "Id:" + MyUtils.byteArrayToHexString(tag.getId()));
         //NFC卡片所支持的技术标准
         Log.d(TAG, "TechList:" + Arrays.toString(tag.getTechList()));
     }
@@ -173,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements IOAsyncTask.OnRes
                     for (int i = 0; i < bCount; i++) {
                         byte[] data = mfc.readBlock(bIndex);
                         metaInfo += "Block " + bIndex + " : "
-                                + Util.byteArrayToHexString(data) + "\n";
+                                + MyUtils.byteArrayToHexString(data) + "\n";
                         bIndex++;
                     }
                 } else {

@@ -18,12 +18,7 @@
             android:name=".MainActivity"
             android:launchMode="singleTop"
             android:screenOrientation="locked">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-
-            </intent-filter>
 
             <!--<intent-filter>-->
             <!--&lt;!&ndash; nfc filter &ndash;&gt;-->
@@ -43,6 +38,17 @@
             <!--</intent-filter>-->
 
 
+
+        </activity>
+
+        <activity android:name=".NFCard">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+
+            </intent-filter>
+
             <intent-filter>
                 <action android:name="android.nfc.action.TECH_DISCOVERED"/>
                 <action android:name="android.nfc.action.TAG_DISCOVERED"/>
@@ -52,6 +58,7 @@
             <meta-data
                 android:name="android.nfc.action.TECH_DISCOVERED"
                 android:resource="@xml/nfc_tech_filter"/>
+
         </activity>
     </application>
 

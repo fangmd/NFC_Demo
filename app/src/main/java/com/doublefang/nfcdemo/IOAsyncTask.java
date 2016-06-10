@@ -14,9 +14,6 @@ public class IOAsyncTask extends AsyncTask<IsoDep, Void, String> {
     private static final String TAG = IOAsyncTask.class.getName();
     private OnResultListener mOnResultListener;
 
-    public interface OnResultListener {
-        void onResult(String resultStr);
-    }
 
     public IOAsyncTask(OnResultListener onResultListener) {
         mOnResultListener = onResultListener;
@@ -37,16 +34,21 @@ public class IOAsyncTask extends AsyncTask<IsoDep, Void, String> {
                 }
 
 //                byte[] atqa = nfca.getAtqa();
-//                String s = Util.byteArrayToHexString(atqa);
+//                String s = MyUtils.byteArrayToHexString(atqa);
 //                Log.d(TAG, "nfca.getAtqa() : " + s);
 
 
-                int le = nfca.getMaxTransceiveLength();
-                byte[] bytes = new byte[le];
+                final byte[] cmd = { (byte) 0x80, // CLA Class
+                        (byte) 0x5C, // INS Instruction
+                        (byte) 0x00, // P1 Parameter 1
+                        (byte) 0x02, // P2 Parameter 2
+                        (byte) 0x04, // Le
+                };
+
                 byte[] transceive;
                 try {
-                    transceive = nfca.transceive(bytes);
-                    ret = Util.byteArrayToHexString(transceive);
+                    transceive = nfca.transceive(cmd);
+                    ret = MyUtils.byteArrayToHexString(transceive);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
