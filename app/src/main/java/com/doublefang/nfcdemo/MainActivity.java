@@ -56,6 +56,30 @@ public class MainActivity extends AppCompatActivity implements IOAsyncTask.OnRes
     }
 
     /**
+     * 解析 IsoDep 技术标准的数据
+     *
+     * @param intent
+     */
+    private void processIntentIsoDep(Intent intent) {
+        //取出封装在intent中的TAG
+        Log.d(TAG, "handleIntent: " + intent.getAction());
+        if (!intent.getAction().equals(NfcAdapter.ACTION_TECH_DISCOVERED)) {
+            Log.d(TAG, "handleIntent: no valid action");
+            return;
+        }
+
+        Tag tagFromIntent = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+        for (String tech : tagFromIntent.getTechList()) {
+            System.out.println(tech);
+        }
+        //读取TAG
+        IsoDep nfca = IsoDep.get(tagFromIntent);
+        new IOAsyncTask(this).execute(nfca);
+    }
+
+    //---------------------------------------------------------------
+
+    /**
      * 查看 nfc 卡的基本信息
      *
      * @param intent
@@ -97,27 +121,6 @@ public class MainActivity extends AppCompatActivity implements IOAsyncTask.OnRes
 //        new IOAsyncTask(this).execute(nfca);
     }
 
-    /**
-     * 解析 IsoDep 技术标准的数据
-     *
-     * @param intent
-     */
-    private void processIntentIsoDep(Intent intent) {
-        //取出封装在intent中的TAG
-        Log.d(TAG, "handleIntent: " + intent.getAction());
-        if (!intent.getAction().equals(NfcAdapter.ACTION_TECH_DISCOVERED)) {
-            Log.d(TAG, "handleIntent: no valid action");
-            return;
-        }
-
-        Tag tagFromIntent = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-        for (String tech : tagFromIntent.getTechList()) {
-            System.out.println(tech);
-        }
-        //读取TAG
-        IsoDep nfca = IsoDep.get(tagFromIntent);
-        new IOAsyncTask(this).execute(nfca);
-    }
 
     /**
      * 解析 MifareClassic 技术标准的数据
